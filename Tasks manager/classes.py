@@ -1,6 +1,5 @@
 import pickle
 import hashlib
-from terminaltables import AsciiTable
 
 
 class Usuario:

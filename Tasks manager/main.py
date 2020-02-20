@@ -1,7 +1,8 @@
 from classes import *
 
 def menu_login():
-    engano = input('Entrou nesta tela por engano? Volte ao menu digitando 1: ')
+    print('Entrou nesta tela por engano? Volte ao menu digitando 1')
+    engano = input('Ou pressione qualquer tecla para continuar: ')
     if engano == '1':
         return None
     while True:
@@ -14,7 +15,8 @@ def menu_login():
 
 
 def menu_cadastro():
-    engano = input('Entrou nesta tela por engano? Volte ao menu digitando 1: ')
+    print('Entrou nesta tela por engano? Volte ao menu digitando 1')
+    engano = input('Ou pressione qualquer tecla para continuar: ')
     if engano == '1':
         return None
     while True:
@@ -29,7 +31,8 @@ def menu_cadastro():
 
 
 def cadastrar_tarefas(user):
-    engano = input('Entrou nesta tela por engano? Volte ao menu digitando 1: ')
+    print('Entrou nesta tela por engano? Volte ao menu digitando 1')
+    engano = input('Ou pressione qualquer tecla para continuar: ')
     if engano == '1':
         return None
     titulo = input('Digite o título da tarefa: ')
@@ -43,14 +46,16 @@ def cadastrar_tarefas(user):
 
 
 def visualizar_tarefas(user):
-    engano = input('Entrou nesta tela por engano? Volte ao menu digitando 1: ')
+    print('Entrou nesta tela por engano? Volte ao menu digitando 1')
+    engano = input('Ou pressione qualquer tecla para continuar: ')
     if engano == '1':
         return None
     user.visualizar_tarefas()
 
 
 def alterar_tarefas(user):
-    engano = input('Entrou nesta tela por engano? Volte ao menu digitando 1: ')
+    print('Entrou nesta tela por engano? Volte ao menu digitando 1')
+    engano = input('Ou pressione qualquer tecla para continuar: ')
     if engano == '1':
         return None
     user.visualizar_tarefas()
@@ -67,7 +72,8 @@ def alterar_tarefas(user):
 
 
 def excluir_tarefa(user):
-    engano = input('Entrou nesta tela por engano? Volte ao menu digitando 1: ')
+    print('Entrou nesta tela por engano? Volte ao menu digitando 1')
+    engano = input('Ou pressione qualquer tecla para continuar: ')
     if engano == '1':
         return None
     user.visualizar_tarefas()

@@ -1,5 +1,6 @@
 import pickle
 import hashlib
+import os
 
 
 class Usuario:
@@ -44,13 +45,32 @@ class Usuario:
 
     def visualizar_tarefas(self):
         self.tarefas = Tarefa.carregar_tarefas(self.nome)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        self.tarefas.sort(key=lambda x: x.identificador)
         for i in self.tarefas:
-            print('°' * 70)
-            print('Id:', i.identificador)
-            print('Titulo:', i.titulo)
-            print('Prioridade:', i.prioridade)
-            print('Descricao:', i.descricao)
-            print('°'*70)
+            if i.prioridade == 'Alta':
+                print('°' * 70)
+                print('Id:', i.identificador)
+                print('Titulo:', i.titulo)
+                print('Prioridade:', i.prioridade)
+                print('Descricao:', i.descricao)
+                print('°' * 70)
+        for i in self.tarefas:
+            if i.prioridade == 'Média':
+                print('°' * 70)
+                print('Id:', i.identificador)
+                print('Titulo:', i.titulo)
+                print('Prioridade:', i.prioridade)
+                print('Descricao:', i.descricao)
+                print('°'*70)
+        for i in self.tarefas:
+            if i.prioridade == 'Baixa':
+                print('°' * 70)
+                print('Id:', i.identificador)
+                print('Titulo:', i.titulo)
+                print('Prioridade:', i.prioridade)
+                print('Descricao:', i.descricao)
+                print('°'*70)
 
     def editar_tarefa(self, iden, nova_tarefa):
         for item in range(len(self.tarefas)):

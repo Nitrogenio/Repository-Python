@@ -1,6 +1,16 @@
+#/*******************************************************************************
+#Autor: Gabriel da Silva Barreto
+#Componente Curricular: MI - Algoritmos
+#Concluido em: 15/11/2019
+#Declaro que este código foi elaborado por mim de forma individual e não contém nenhum
+#trecho de código de outro colega ou de outro autor, tais como provindos de livros e
+#apostilas, e páginas ou documentos eletrônicos da Internet. Qualquer trecho de código
+#de outra autoria que não a minha está destacado com uma citação para o autor e a fonte
+#do código, e estou ciente que estes trechos não serão considerados para fins de avaliação.
+#******************************************************************************************/
+
 import pickle
 import hashlib
-import os
 
 
 class Usuario:
@@ -45,32 +55,34 @@ class Usuario:
 
     def visualizar_tarefas(self):
         self.tarefas = Tarefa.carregar_tarefas(self.nome)
-        os.system('cls' if os.name == 'nt' else 'clear')
-        self.tarefas.sort(key=lambda x: x.identificador)
-        for i in self.tarefas:
-            if i.prioridade == 'Alta':
-                print('°' * 70)
-                print('Id:', i.identificador)
-                print('Titulo:', i.titulo)
-                print('Prioridade:', i.prioridade)
-                print('Descricao:', i.descricao)
-                print('°' * 70)
-        for i in self.tarefas:
-            if i.prioridade == 'Média':
-                print('°' * 70)
-                print('Id:', i.identificador)
-                print('Titulo:', i.titulo)
-                print('Prioridade:', i.prioridade)
-                print('Descricao:', i.descricao)
-                print('°'*70)
-        for i in self.tarefas:
-            if i.prioridade == 'Baixa':
-                print('°' * 70)
-                print('Id:', i.identificador)
-                print('Titulo:', i.titulo)
-                print('Prioridade:', i.prioridade)
-                print('Descricao:', i.descricao)
-                print('°'*70)
+        if self.tarefas:
+            self.tarefas.sort(key=lambda x: x.identificador)
+            for i in self.tarefas:
+                if i.prioridade == 'Alta':
+                    print('°' * 70)
+                    print('Id:', i.identificador)
+                    print('Titulo:', i.titulo)
+                    print('Prioridade:', i.prioridade)
+                    print('Descricao:', i.descricao)
+                    print('°' * 70)
+            for i in self.tarefas:
+                if i.prioridade == 'Média':
+                    print('°' * 70)
+                    print('Id:', i.identificador)
+                    print('Titulo:', i.titulo)
+                    print('Prioridade:', i.prioridade)
+                    print('Descricao:', i.descricao)
+                    print('°'*70)
+            for i in self.tarefas:
+                if i.prioridade == 'Baixa':
+                    print('°' * 70)
+                    print('Id:', i.identificador)
+                    print('Titulo:', i.titulo)
+                    print('Prioridade:', i.prioridade)
+                    print('Descricao:', i.descricao)
+                    print('°'*70)
+        else:
+            print('Você não tem tarefas cadastradas no momento.')
 
     def editar_tarefa(self, iden, nova_tarefa):
         for item in range(len(self.tarefas)):

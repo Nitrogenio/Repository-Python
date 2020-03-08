@@ -14,14 +14,12 @@ import getpass
 import sys
 import os
 
+
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
 def menu_login():
-    print('Entrou nesta tela por engano? Volte ao menu digitando 1.')
-    engano = input('Ou aperte qualquer outra tecla: ')
-    if engano == '1':
-        return None
     while True:
         nome = input('Digite seu nome de usuário: ').upper()
         senha = getpass.getpass('Digite sua senha: ')
@@ -29,13 +27,12 @@ def menu_login():
         if user.login():
             return user
         print('Usuário e senha incorretos...')
+        voltarMenu = input('Aperte 1 para voltar ao menu.\nOu pressione qualquer tecla para tentar novamente: ')
+        if voltarMenu == '1':
+            return None
 
 
 def menu_cadastro():
-    print('Entrou nesta tela por engano? Volte ao menu digitando 1.')
-    engano = input('Ou aperte qualquer outra tecla: ')
-    if engano == '1':
-        return None
     while True:
         nome = input('Digite seu nome de usuário: ').upper()
         senha = getpass.getpass('Digite sua senha: ')
@@ -45,13 +42,12 @@ def menu_cadastro():
             if user.cadastrar_usuario():
                 return user
         print('As senhas estão diferentes..')
+        voltarMenu = input('Aperte 1 para voltar ao menu.\nOu pressione qualquer tecla para tentar novamente: ')
+        if voltarMenu == '1':
+            return None
 
 
 def cadastrar_tarefas(user):
-    print('Entrou nesta tela por engano? Volte ao menu digitando 1.')
-    engano = input('Ou aperte qualquer outra tecla: ')
-    if engano == '1':
-        return None
     titulo = input('Digite o título da tarefa: ')
     print('Prioridades:\n'
           '[1] Baixa\n'
@@ -71,39 +67,42 @@ def cadastrar_tarefas(user):
 
 
 def visualizar_tarefas(user):
-    print('Entrou nesta tela por engano? Volte ao menu digitando 1.')
-    engano = input('Ou aperte qualquer outra tecla: ')
-    if engano == '1':
-        return None
     user.visualizar_tarefas()
 
 
 def alterar_tarefas(user):
-    print('Entrou nesta tela por engano? Volte ao menu digitando 1.')
-    engano = input('Ou aperte qualquer tecla: ')
-    if engano == '1':
-        return None
-    user.visualizar_tarefas()
-    iden = input('Digite o id da tarefa que você quer editar: ')
-    titulo = input('Digite o título da tarefa: ')
-    print('Prioridades:\n'
-          '[1] Baixa\n'
-          '[2] Média\n'
-          '[3] Alta')
-    prioridade = input('Digite o Nº da opção de prioridade: ')
-    descricao = input('Digite a descrição da tarefa: ')
-    nova_tarefa = Tarefa(titulo, prioridade, descricao)
-    user.editar_tarefa(iden, nova_tarefa)
+    if not user.tarefas:
+        print('Você não tem tarefas cadastradas. Crie uma tarefa nova primeiro!')
+    else:
+        print('Tem certeza que quer alterar uma tarefa? Digite 1 para confirmar.')
+        engano = input('Ou aperte qualquer tecla: ')
+        if engano == '1':
+            iden = input('Digite o id da tarefa que você quer editar: ')
+            titulo = input('Digite o título da tarefa: ')
+            print('Prioridades:\n'
+                  '[1] Baixa\n'
+                  '[2] Média\n'
+                  '[3] Alta')
+            prioridade = input('Digite o Nº da opção de prioridade: ')
+            descricao = input('Digite a descrição da tarefa: ')
+            nova_tarefa = Tarefa(titulo, prioridade, descricao)
+            user.editar_tarefa(iden, nova_tarefa)
+        else:
+            return None
 
 
 def excluir_tarefa(user):
-    print('Entrou nesta tela por engano? Volte ao menu digitando 1.')
-    engano = input('Ou aperte qualquer tecla: ')
-    if engano == '1':
+    if not user.tarefas:
+        print('Você não tem tarefas cadastradas. Crie uma tarefa nova primeiro!')
         return None
-    user.visualizar_tarefas()
-    iden = input('Digite o id da tarefa que você quer editar: ')
-    user.deletar_tarefa(iden)
+    else:
+        print('Tem certeza que quer excluir uma tarefa? Digite 1 para confirmar.')
+        engano = input('Ou aperte qualquer tecla: ')
+        if engano == '1':
+            iden = input('Digite o id da tarefa que você quer editar: ')
+            user.deletar_tarefa(iden)
+        else:
+            return None
 
 
 def menu_tarefas(user):
@@ -117,16 +116,12 @@ def menu_tarefas(user):
         print('')
         opcao = input('Digite o Nº da opção que você deseja: ')
         if opcao == '1':
-            clear()
             cadastrar_tarefas(user)
         elif opcao == '2':
-            clear()
             visualizar_tarefas(user)
         elif opcao == '3':
-            clear()
             alterar_tarefas(user)
         elif opcao == '4':
-            clear()
             excluir_tarefa(user)
         elif opcao == '5':
             return None
@@ -137,12 +132,12 @@ def menu_tarefas(user):
 def menu():
     opcao = 3
     while opcao != '3':
-        print('')
-        print('[1] Usuário novo? Digite 1 e cadastre-se.')
-        print('[2] Já tem um cadastro? Digite 2 para entrar no sistema.')
-        print('[3] Deseja sair do sistema? Digite 3...')
-        print('')
-        opcao = input('Digite aqui: ')
+        print('*'*37)
+        print('* Digite 1 e cadastre-se            *')
+        print('* Digite 2 para entrar no sistema   *')
+        print('* Digite 3 para sair do sistema     *')
+        print('*'*37)
+        opcao = input('Digite a opção que você deseja: ')
         if opcao == '1':
             clear()
             user = menu_cadastro()

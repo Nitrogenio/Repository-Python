@@ -11,6 +11,7 @@
 
 import pickle
 import hashlib
+from prettytable import PrettyTable
 
 
 class Usuario:
@@ -21,50 +22,58 @@ class Usuario:
 
     def cadastrar_usuario(self):
         try:
+            ud = open('UserData.txt', 'r+')
+            lines = ud.readlines()
+            for line in lines:
+                user = line.split()
+                if self.nome == user[0]:
+                    print('Este nome de usuário ja está sendo utilizado. tente novamente!')
+                    return False
+                ud.write(f'{self.nome} ')
+                ud.write(hashlib.md5(f'{self.senha}\n'.encode("utf-8")).hexdigest())
+            ud.close()
+        except:
+            ud = open('UserData.txt', 'x')
+            ud.write(f'{self.nome} ')
+            ud.write(hashlib.md5(f'{self.senha}\n'.encode("utf-8")).hexdigest())
+            ud.close()
+        print('Cadastro realizado com sucesso!')
+        return True
+
+    def login(self):
+        try:
             with open('UserData.txt', 'r') as ud:
                 lines = ud.readlines()
                 for line in lines:
                     user = line.split()
                     if self.nome == user[0]:
-                        print('Este nome de usuário ja está sendo utilizado. tente novamente!')
-                        return False
-                ud.write(f'{self.nome} ')
-                ud.write(hashlib.md5(f'{self.senha}'.encode("utf-8")).hexdigest())
+                        if hashlib.md5(f'{self.senha}\n'.encode("utf-8")).hexdigest() == user[1]:
+                            print('Login efeituado com sucesso!')
+                            self.tarefas = Tarefa.carregar_tarefas(self.nome)
+                            return True
         except:
-            with open('UserData.txt', 'x') as ud:
-                ud.write(f'{self.nome} ')
-                ud.write(hashlib.md5(f'{self.senha}'.encode("utf-8")).hexdigest())
-        return True
-
-    def login(self):
-        with open('UserData.txt', 'r') as ud:
-            lines = ud.readlines()
-            for line in lines:
-                user = line.split()
-                if self.nome == user[0]:
-                    if hashlib.md5(f'{self.senha}'.encode("utf-8")).hexdigest() == user[1]:
-                        print('Login efeituado com sucesso!')
-                        self.tarefas = Tarefa.carregar_tarefas(self.nome)
-                        return True
-        print('O usuário ou a senha estão incorretos. Tente novamente!')
-        return False
+            print('O usuário ou a senha estão incorretos. Tente novamente!')
+            return False
 
     def inserir_tarefa(self, titulo, prioridade, descricao):
-        self.tarefas.append(Tarefa(titulo, prioridade, descricao))
+        self.tarefas.append(Tarefa(titulo, prioridade, descricao, self.nome))
         Tarefa.salvar_tarefas(self.nome, self.tarefas)
 
     def visualizar_tarefas(self):
+        tabelaAlta = PrettyTable()
+        tabelaMedia = PrettyTable()
+        tabelaBaixa = PrettyTable()
         self.tarefas = Tarefa.carregar_tarefas(self.nome)
         if self.tarefas:
-            self.tarefas.sort(key=lambda x: x.identificador)
+            self.tarefas.sort(key=lambda x: str(x.identificador))
             for i in self.tarefas:
                 if i.prioridade == 'Alta':
-                    print('°' * 70)
+                    print('°'*70)
                     print('Id:', i.identificador)
                     print('Titulo:', i.titulo)
                     print('Prioridade:', i.prioridade)
                     print('Descricao:', i.descricao)
-                    print('°' * 70)
+                    print('°'*70)
             for i in self.tarefas:
                 if i.prioridade == 'Média':
                     print('°' * 70)
@@ -82,7 +91,9 @@ class Usuario:
                     print('Descricao:', i.descricao)
                     print('°'*70)
         else:
+            print('')
             print('Você não tem tarefas cadastradas no momento.')
+            print('')
 
     def editar_tarefa(self, iden, nova_tarefa):
         for item in range(len(self.tarefas)):
@@ -95,14 +106,26 @@ class Usuario:
         Tarefa.salvar_tarefas(self.nome, self.tarefas)
 
 class Tarefa:
-    def __init__(self, titulo, prioridade, descricao):
+    def __init__(self, titulo, prioridade, descricao, prefixo):
         self.titulo = titulo
         self.prioridade = prioridade
         self.descricao = descricao
-        self.identificador = f'{Tarefa.contador:0>3}'
-        Tarefa.contador += 1
+        self.identificador = Tarefa.idGeneration(prefixo)
 
-    contador = 1
+    @staticmethod
+    def idGeneration(prefixo):
+        filename = f'{prefixo}.bin'
+        try:
+            with open(filename, 'rb') as td:
+                tamanho = pickle.load(td)
+                if len(tamanho) == 0:
+                    contador = 1
+                else:
+                    contador = len(tamanho) + 1
+            return f'{contador:0>3}'
+        except:
+            contador = 1
+            return f'{contador:0>3}'
 
     def __str__(self):
         return f'{self.identificador}\n{self.titulo}\n{self.prioridade}\n{self.descricao}'

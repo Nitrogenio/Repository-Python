@@ -60,36 +60,54 @@ class Usuario:
         Tarefa.salvar_tarefas(self.nome, self.tarefas)
 
     def visualizar_tarefas(self):
-        tabelaAlta = PrettyTable()
-        tabelaMedia = PrettyTable()
-        tabelaBaixa = PrettyTable()
+        tabelaAlta = PrettyTable(['Id', 'Título', 'Prioridade', 'Descrição'])
+        tabelaMedia = PrettyTable(['Id', 'Título', 'Prioridade', 'Descrição'])
+        tabelaBaixa = PrettyTable(['Id', 'Título', 'Prioridade', 'Descrição'])
         self.tarefas = Tarefa.carregar_tarefas(self.nome)
         if self.tarefas:
             self.tarefas.sort(key=lambda x: str(x.identificador))
             for i in self.tarefas:
                 if i.prioridade == 'Alta':
-                    print('°'*70)
-                    print('Id:', i.identificador)
-                    print('Titulo:', i.titulo)
-                    print('Prioridade:', i.prioridade)
-                    print('Descricao:', i.descricao)
-                    print('°'*70)
+                    tarefa = {'Id': i.identificador, 'Título': i.titulo, 'Prioridade': i.prioridade,
+                              'Descrição': i.descricao}
+
+                    tabelaAlta.align['Id'] = 'l'
+                    tabelaAlta.align['Título'] = 'l'
+                    tabelaAlta.align['Prioridade'] = 'l'
+                    tabelaAlta.align['Descrição'] = 'c'
+                    tabelaAlta.padding_width = 3
+
+                    tabelaAlta.add_row([tarefa['Id'], tarefa['Título'], tarefa['Prioridade'], tarefa['Descrição']])
+                    print(tabelaAlta.get_string(sortby="Id"))
+                    print('\n')
             for i in self.tarefas:
                 if i.prioridade == 'Média':
-                    print('°' * 70)
-                    print('Id:', i.identificador)
-                    print('Titulo:', i.titulo)
-                    print('Prioridade:', i.prioridade)
-                    print('Descricao:', i.descricao)
-                    print('°'*70)
+                    tarefa = {'Id': i.identificador, 'Título': i.titulo, 'Prioridade': i.prioridade,
+                              'Descrição': i.descricao}
+
+                    tabelaMedia.align['Id'] = 'l'
+                    tabelaMedia.align['Título'] = 'l'
+                    tabelaMedia.align['Prioridade'] = 'l'
+                    tabelaMedia.align['Descrição'] = 'c'
+                    tabelaMedia.padding_width = 3
+
+                    tabelaMedia.add_row([tarefa['Id'], tarefa['Título'], tarefa['Prioridade'], tarefa['Descrição']])
+                    print(tabelaMedia.get_string(sortby="Id"))
+                    print('\n')
             for i in self.tarefas:
                 if i.prioridade == 'Baixa':
-                    print('°' * 70)
-                    print('Id:', i.identificador)
-                    print('Titulo:', i.titulo)
-                    print('Prioridade:', i.prioridade)
-                    print('Descricao:', i.descricao)
-                    print('°'*70)
+                    tarefa = {'Id': i.identificador, 'Título': i.titulo, 'Prioridade': i.prioridade,
+                              'Descrição': i.descricao}
+
+                    tabelaBaixa.align['Id'] = 'l'
+                    tabelaBaixa.align['Título'] = 'l'
+                    tabelaBaixa.align['Prioridade'] = 'l'
+                    tabelaBaixa.align['Descrição'] = 'c'
+                    tabelaBaixa.padding_width = 3
+
+                    tabelaBaixa.add_row([tarefa['Id'], tarefa['Título'], tarefa['Prioridade'], tarefa['Descrição']])
+                    print(tabelaBaixa.get_string(sortby="Id"))
+                    print('\n')
         else:
             print('')
             print('Você não tem tarefas cadastradas no momento.')
@@ -109,8 +127,16 @@ class Tarefa:
     def __init__(self, titulo, prioridade, descricao, prefixo):
         self.titulo = titulo
         self.prioridade = prioridade
-        self.descricao = descricao
+        self.descricao = Tarefa.controleCaracteres(descricao)
         self.identificador = Tarefa.idGeneration(prefixo)
+
+    @staticmethod
+    def controleCaracteres(descricao):
+        desc = list(descricao.split())
+        for i in range(len(desc)):
+            if i != 0 and i % 10 == 0:
+                desc[i] = desc[i] + '\n'
+        return ' '.join(desc)
 
     @staticmethod
     def idGeneration(prefixo):

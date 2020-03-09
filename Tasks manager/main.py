@@ -41,7 +41,8 @@ def menu_cadastro():
             user = Usuario(nome, senha)
             if user.cadastrar_usuario():
                 return user
-        print('As senhas estão diferentes..')
+        elif senha != confirmando:
+            print('As senhas estão diferentes..')
         voltarMenu = input('Aperte 1 para voltar ao menu.\nOu pressione qualquer tecla para tentar novamente: ')
         if voltarMenu == '1':
             return None
